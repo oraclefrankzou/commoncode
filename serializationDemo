@@ -1,0 +1,25 @@
+import redis
+import pickle
+
+
+"""
+" 功能: 对像进行序列化和反序列化，同时从redis中进行存储
+"""
+class User():
+    def __init__(self,username,password):
+        self.username=username
+        self.password=password
+    def get_str(self):
+        return "username: "+self.username+" "+"password:"+self.password
+
+if __name__ == '__main__':
+   user=User("aa","bb")
+   rd=redis.Redis(host="192.168.56.110",port=6379)
+   #把对像dump成一个string对像
+   str=pickle.dumps(user)
+   rd.set(user.username,str)
+
+   #从redis中取出数据，并通过loads进行反序列化
+   user2=pickle.loads(rd.get(user.username))
+   print(id(user2))
+   print(user2.get_str())
