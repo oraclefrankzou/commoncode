@@ -1,7 +1,5 @@
 
-from  DBUtils.PooledDB import PooledDB
-from concurrent.futures import ProcessPoolExecutor
-from concurrent.futures import ThreadPoolExecutor
+
 import time
 import multiprocessing
 import threading
