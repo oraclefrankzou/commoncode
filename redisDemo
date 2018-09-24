@@ -1,0 +1,35 @@
+import redis
+
+#创建连接池
+rdisconnectpool=redis.ConnectionPool(host='192.168.56.110',port=6379)
+rdisconnectpool.max_connections=100
+
+#实始化redis对像
+rc=redis.Redis(connection_pool=rdisconnectpool)
+piple=rc.pipeline()
+
+#根据key，返回cache数据
+def cacheGet():
+    pass
+
+#根据key,放到redis中数据
+def cachePut(key):
+     rc.set(str(key),str(key)+"a")
+#根据key,删除redis中数据
+
+def cacheRemove():
+    pass
+def cacheListPush(list,value):
+     rc.lpush(list,value)
+
+
+def cacheListPop(list):
+    return rc.rpop(list)
+
+
+def main():
+      for i in range(100):
+           cacheListPush("list1",i)
+
+if __name__=="__main__":
+     main()
