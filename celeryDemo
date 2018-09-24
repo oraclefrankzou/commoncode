@@ -1,0 +1,31 @@
+
+#该文件在客户机上运行
+
+import time
+from celery import Celery
+broker = 'redis://192.168.56.110:6379'
+backend = 'redis://192.168.56.110:6379/0'
+app = Celery('my_task', broker=broker, backend=backend)
+@app.task
+def add(x, y):
+    time.sleep(5)     # 模拟耗时操作
+    return x + y
+
+#############
+#windows下启动task例，以8个线程
+#D:\Python\Python36\Scripts>celery.exe -A TASK worker --pool=solo --loglevel=INFO
+# --concurrency=8
+
+
+#在另一个服务器中进行调用
+from TASK import add
+import time
+#增加一个分布式任务
+task1=add.delay(5,10)
+
+time.sleep(6)
+
+#判断任务是否运算完成,True或False
+if task1.ready():
+     #得到返回结果
+     print(task1.result)
