@@ -1,0 +1,24 @@
+from flask_restful import Resource,Api
+from flask import Flask
+import pyqrcode
+from io import BytesIO
+app=Flask(__name__)
+
+#简单快速输出一个二维码
+
+@app.route("/qrcode")
+def qrcode():
+    #二维码中存放的信息
+    str="http://39.107.103.162:8080/riental-web/load/20180921112941_sscp_Android_v1.1.5.apk"
+    url = pyqrcode.create(str)
+    stream=BytesIO()
+    url.svg(stream,scale=5)
+    return stream.getvalue(),200,{
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'}
+
+if __name__ == '__main__':
+
+    app.run(host="0.0.0.0",port=5002)
