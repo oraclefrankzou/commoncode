@@ -1,0 +1,46 @@
+
+from sqlalchemy import create_engine,Column,String,Integer,and_,or_
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+
+
+engine=create_engine("mysql+pymysql://root:root@192.168.56.110/db2?use",encoding="utf8",echo=True)
+Session=sessionmaker(bind=engine)
+dbsession=Session()
+
+
+Base=declarative_base()
+
+
+class User(Base):
+    __tablename__ = "t_user"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(64))
+    password = Column(String(128))
+    email = Column(String(300))
+    token = Column(String(200))
+
+if __name__ == '__main__':
+    #查询一个用户,返回对像
+    #dbsession.query(User).filter(User.username=="qq")返回对像列表
+    #单个条件查询
+    #user=dbsession.query(User).filter(User.username=="qq").first()
+    #多个条件 and
+    #user = dbsession.query(User).filter(and_(User.username == "qq",User.id==26)).first()
+    #多个条件实现了or
+    #user = dbsession.query(User).filter(or_(User.username == "qq", User.id == 26)).first()
+    #实现了mysql的limit 0,10语义
+    #user = dbsession.query(User).filter().limit(1).offset(2)[0]
+    user = dbsession.query(User).filter(User.username.like("qq%")).first()
+    print(user.id)
+    #统计记录总数
+    count=dbsession.query(User).filter().count()
+    #增加一个对
+    #dbsession.add(user)
+    #删除一个对像
+    #dbsession.delete(user)
+    #提交
+    #dbsession.commit()
+    #print(count)
+    #
