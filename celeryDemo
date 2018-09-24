@@ -15,7 +15,7 @@ def add(x, y):
     return x + y
 
 #############
-#windows下启动task例，以8个线程
+#windows下启动task例，以8个线程,TASK.py
 #D:\Python\Python36\Scripts>celery.exe -A TASK worker --pool=solo --loglevel=INFO
 # --concurrency=8
 
