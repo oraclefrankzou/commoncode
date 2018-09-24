@@ -1,0 +1,42 @@
+import os,sys
+import logging
+import time
+
+#以demon方式启动进程,仅限于linux系统
+
+# 第一次以os.fork(),再次以os.fork()启动进程
+logging.basicConfig(level=logging.INFO,format="%(asctime)s-%(message)s")
+
+def deamon_init(stdin="/dev/null",stdout="/dev/null",stderr="/dev/null"):
+
+     #重定向输入输出,也可以指定输出到文件
+     sys.stdin=stdin
+     sys.stdout=open(stdout,"a")
+     sys.stderr=open(stdout,"a")
+
+     #第一次fork
+     pid=os.fork()
+     if (pid>0):
+          sys.exit(0)
+
+     os.setsid()
+     os.chdir("/")
+
+     #第二次form
+     pid = os.fork()
+     if (pid>0):
+          sys.exit(0)
+
+def main():
+    while 1:
+        logging.info("time is"+str(time.time()))
+
+if __name__=="__main__":
+    print(time.asctime())
+    #开始调用deamon_init
+    deamon_init()
+    time.sleep(5)
+    print(time.asctime())
+    #main()
+
+
