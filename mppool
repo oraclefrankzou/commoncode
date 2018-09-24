@@ -1,0 +1,34 @@
+
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
+import time
+import random
+from multiprocessing import Process
+import threading
+import os
+
+"""
+"使用多线程 或是多进程池来执行某个任务
+"""
+
+#定义池的大小
+pool_size=20
+
+def  func(str):
+     print(str)
+     print(threading.current_thread().name)
+     print(Process.current_process().pid)
+     time.sleep(50)
+
+if __name__ == '__main__':
+
+    #定义参数列表
+    item=[item for item in range(pool_size)]
+
+    # 定义线程池，并向进程池提交任务.item是可迭代的，作为参数传递给func
+    #with ThreadPoolExecutor(max_workers=pc) as pool:
+    #定义进程池，并向进程池提交任务.item是可迭代的，作为参数传递给func
+    with ProcessPoolExecutor(max_workers=pool_size) as pool:
+          pool.map(func,item)
+
+
