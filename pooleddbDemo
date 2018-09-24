@@ -1,0 +1,49 @@
+#import concurrent.futures
+import pymysql
+from  DBUtils.PooledDB import PooledDB
+import time
+
+"""
+"使用mysql数据库连接池
+"""
+
+dbparam = {
+    "host": "192.168.56.110",
+    "port": 3306,
+    "user": "root",
+    "password": "root",
+    "charset": "utf8",
+     "dbname":"db2"
+}
+
+class DBPoolUtil():
+     def __init__(self,dbparam):
+         #mincached 刚开始启动时连接的数
+         #maxcached 池中最多可以有多少个空闲连接
+
+         try:
+             self.dbpool = PooledDB(
+                creator=pymysql, mincached=100, maxcached=500,
+                host=dbparam["host"],
+                port=int(dbparam["port"]),
+                user=dbparam["user"],
+                password=dbparam["password"],
+                charset=dbparam["charset"],
+                db=dbparam["dbname"]
+                )
+         except Exception as e:
+             print(e.args.__str__())
+
+     def get_connection(self):
+          self.connection=self.dbpool.connection()
+          return  self.connection
+
+
+     def close_connection(self):
+          return self.connection.close()
+
+
+
+if __name__ == '__main__':
+    dbPoolUtil=DBPoolUtil(dbparam)
+
