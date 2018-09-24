@@ -1,0 +1,48 @@
+
+import cx_Oracle
+import logging
+
+#实现了一个基本的oracle的操作示例
+class ORC():
+
+    results = []
+    curOrc = ''
+    conOrc = ''
+
+    def __init__(self,constr,sqlstr):
+        self.constr=constr
+        self.sqlstr=sqlstr
+
+    def get_conn(self):
+        #连接orcle数据库
+        try:
+            self.conOrc = cx_Oracle.connect(self.constr)
+        except Exception as e:
+            print("connect errro")
+            print(e.args)
+
+
+    def exec(self):
+         #执行sql，并返回结果   
+         self.curOrc = self.conOrc.cursor()
+         self.curOrc.execute(self.sqlstr)
+         results = self.curOrc.fetchall()
+
+         return results[0][0]
+
+    def close(self):
+        try:
+            self.conOrc.close()
+        except Exception as e:
+            print("connect errro")
+            print(e.args)
+
+if __name__=="__main__":
+
+      constr1='username/queryuser@192.168.56.102/orc'
+      str1="select sequence# from v$log where status='CURRENT'"
+      orc1=ORC(constr1,str1)
+      orc1.get_conn()
+
+
+
