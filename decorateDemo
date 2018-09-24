@@ -1,0 +1,28 @@
+from functools import wraps
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+
+#定义装饰器函数
+def d1(name):
+
+   def decorate(func):
+
+     @wraps(func)
+     def wrapper(*args,**kwargs):
+        print("dec+"+name)
+        return func(*args,**kwargs)
+
+     return wrapper
+   return decorate
+
+
+
+#给定的函数加上装饰器,并且增加了一个参数
+@d1(name="这是参数")
+def test():
+    print("test")
+
+if __name__ == '__main__':
+    test()
