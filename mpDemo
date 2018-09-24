@@ -1,0 +1,38 @@
+
+from  DBUtils.PooledDB import PooledDB
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
+import time
+import multiprocessing
+import threading
+import os
+
+"""
+"以多线程或多进程的方式执行一个函数
+"""
+
+def  func(str):
+    time.sleep(5)
+
+
+if __name__ == '__main__':
+    jobs = []
+    print("test start..." + time.asctime())
+
+    for i in range(10):
+           #以进程方式启动
+           #p = multiprocessing.Process(target=func, args=(i,))
+           #以线程方式启动
+           p=threading.Thread(target=func, args=(i,))
+           p.start()
+           jobs.append(p)
+
+        #等待所有线程运行完成
+    for p in jobs:
+               p.join()
+
+
+
+
+
+
