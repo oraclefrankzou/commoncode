@@ -1,0 +1,39 @@
+
+import configparser
+
+#参数读取类,读取参数文件，根据section返回键值
+
+class ConfigGet():
+    #返回结果
+    dict={}
+    #初始化函数，读取配置文件
+    def __init__(self,filename):
+        self.filename=filename
+        self.cp=configparser.ConfigParser()
+        self.cp.read(filenames=self.filename)
+
+    #根据参数，返回对应的参数部分，以dict方式返回
+    def get_param(self,section):
+        self.items=self.cp.items(section)
+
+        if(self.items!=None):
+            for item in self.items:
+               self.dict[item[0]]=item[1]
+
+        return self.dict
+        
+
+##如何调用
+#config=configparser.ConfigParser()
+#config.read("a.conf")
+
+#得到配置文件的section部分一个数组
+#print(config.sections())
+
+#得到selection部分的某个值
+#print(config.get("db1","host"))
+
+#返回某个部分的2维数组，返回键值对
+#for item in (config.items("db1")):
+#     print(item)        
+        
