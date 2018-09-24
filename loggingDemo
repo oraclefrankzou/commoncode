@@ -1,0 +1,31 @@
+import logging
+from logging.handlers import TimedRotatingFileHandler,RotatingFileHandler
+
+
+#得到一个日志对像
+
+#可以得到一个简单的配置
+#logging.basicConfig(filename="test.log", level=logging.INFO, format="%(asctime)s-%(levelname)s:%(message)s")
+
+#复杂的配置,初始化对像和日志级别
+logging.basicConfig(level=logging.INFO)
+logger=logging.getLogger()
+
+#初始化一个hanlder
+logging_handler_file=TimedRotatingFileHandler(filename="test.log", when='m', interval=30, backupCount=10,encoding="UTF-8")
+logging_formatter_file=logging.Formatter("%(asctime)s-%(levelname)s-%(module)s-%(funcName)s- %(lineno)d:%(message)s  ")
+logging_handler_file.setFormatter(logging_formatter_file)
+
+#初始化一个console handler
+logging_handler_stream=logging.StreamHandler()
+logging_formatter_stream=logging.Formatter("%(asctime)s-%(levelname)s-%(module)s-%(funcName)s- %(lineno)d:%(message)s  ")
+logging_handler_stream.setFormatter(logging_formatter_stream)
+
+
+#把这个handler给logger
+logger.addHandler(logging_handler_file)
+logger.addHandler(logging_handler_stream)
+
+if __name__ == '__main__':
+    logger.info("good")
+
