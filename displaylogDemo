@@ -1,0 +1,15 @@
+#执行命令，并在网页上不断输出结果
+@app.route('/yield')
+def t():
+    def inner():
+        proc = subprocess.Popen(
+            ['ansible all -m ping '],             #call something with a lot of output so we can see it
+            shell=True,
+            stdout=subprocess.PIPE
+        )
+
+        for line in iter(proc.stdout.readline,''):
+            time.sleep(1)                           # Don't need this just shows the text streaming
+            yield line.rstrip().decode("utf-8") + '<br/>\n'
+
+    return Response(inner(), mimetype='text/html')
