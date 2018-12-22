@@ -1,0 +1,26 @@
+#根据传来的node进行菜单组装，如果parentid为root表示是顶级菜单,
+#所以parentId为0
+@app.route('/menu')
+def menu():
+
+    nodeId=request.args.get("node")
+    if nodeId=='root':
+        menus = dbsession.query(MainMenu).filter(MainMenu.parentId==0).all()
+    else:
+        menus = dbsession.query(MainMenu).filter(MainMenu.parentId == nodeId).all()
+    datas = []
+    for menu in menus:
+            datas.append(menu.to_json())
+    dbsession.rollback()
+    return  jsonify(datas)
+
+
+##表结构.
+
+CREATE TABLE `t_menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menuText` varchar(500) DEFAULT NULL,
+  `parentId` int(11) DEFAULT NULL,
+  `iconCls` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
